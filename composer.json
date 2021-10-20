@@ -1,0 +1,16 @@
+{
+    "name": "ultra8k/php-form-handler",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ultra8KInc",
+            "email": "rwright@ultra8k.biz"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.5",
+        "plasticbrain/php-flash-messages": "^1.0",
+        "owasp/csrf-protector-php": "^1.0"
+    }
+}
