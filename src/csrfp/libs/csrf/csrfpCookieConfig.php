@@ -1,5 +1,5 @@
 <?php
-namespace CSRFP\CookieConfig;
+namespace OwaspCsrfProtection;
 /**
  * This file has implementation for csrfpCookieConfig class.
  */
@@ -11,7 +11,7 @@ if (!defined('__CSRF_PROTECTOR_COOKIE_CONFIG__')) {
     /**
      * Cookie configuration class.
      */
-    class csrfpCookieConfig
+    class CsrfpCookieConfig
     {
         /**
          * Variable: $path

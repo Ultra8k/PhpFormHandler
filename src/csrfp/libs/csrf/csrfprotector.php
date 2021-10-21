@@ -1,12 +1,12 @@
 <?php
-namespace CSRFP\Protector;
+namespace OwaspCsrfProtection;
 /**
  * This file has implementation for csrfProtector class.
  */
 
-use CSRFP\CookieConfig\csrfpCookieConfig;      // cookie config class
-use CSRFP\DefaultLogger\csrfpDefaultLogger;     // Logger class
-use CSRFP\Action\csrfpAction;           // Actions enumerator
+use OwaspCsrfProtection\CookieConfig;      // cookie config class
+use OwaspCsrfProtection\DefaultLogger;     // Logger class
+use OwaspCsrfProtection\Action;           // Actions enumerator
 
 if (!defined('__CSRF_PROTECTOR__')) {
     define('__CSRF_PROTECTOR__', true);         // to avoid multiple declaration errors
@@ -29,7 +29,7 @@ if (!defined('__CSRF_PROTECTOR__')) {
     /** Indicates that CSRF Protector is already initialized. */
     class alreadyInitializedException extends \exception {};
 
-    class csrfProtector
+    class CsrfProtector
     {
         /*
          * Variable: $isSameOrigin
@@ -100,6 +100,10 @@ if (!defined('__CSRF_PROTECTOR__')) {
          */
         public static $requiredConfigurations  = array(
             'failedAuthAction', 'jsUrl', 'tokenLength');
+
+        public function __construct($length = null, $action = null, $logger = null) {
+          $this->init($length, $action, $logger);
+        }
         
         /*
          * Function: function to initialise the csrfProtector work flow
@@ -200,7 +204,7 @@ if (!defined('__CSRF_PROTECTOR__')) {
 
             // Initialize output buffering handler
             if (!defined('__TESTING_CSRFP__')) {
-                ob_start('csrfProtector::ob_handler');
+                ob_start('OwaspCsrfProtection\CsrfProtector::ob_handler');
             }
 
             if (!isset($_COOKIE[self::$config['CSRFP_TOKEN']])

@@ -1,9 +1,9 @@
 <?php
-namespace CSRFP\DefaultLogger;
+namespace OwaspCsrfProtection;
 /**
  * This file has implementation for csrfpDefaultLogger class.
  */
-use CSRFP\Logger\LoggerInterface;
+use OwaspCsrfProtection\LoggerInterface;
 
 if (!defined('__CSRF_PROTECTOR_DEFAULT_LOGGER_')) {
     // to avoid multiple declaration errors
@@ -14,7 +14,7 @@ if (!defined('__CSRF_PROTECTOR_DEFAULT_LOGGER_')) {
      * 
      * This implementation is based on PHP's default error_log implementation.
      */
-    class csrfpDefaultLogger implements LoggerInterface {
+    class CsrfpDefaultLogger implements LoggerInterface {
         /**
          * Sends error message to the defined error_handling routines.
          * 

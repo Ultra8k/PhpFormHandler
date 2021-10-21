@@ -1,9 +1,9 @@
 <?php
-namespace Form\FlasMessages;
+namespace Ultra8k\PHPFormUtilities;
 
-use Plasticbrain\FlashMessages\FlashMessages;
+use Plasticbrain\FlashMessages\FlashMessages as PBFlashMessages;
 
-class FormFlashMessages extends FlashMessages {
+class FlashMessages extends PBFlashMessages {
     public function getMessages($types=self::defaultType, $clear=false) {
         $output = [];
         

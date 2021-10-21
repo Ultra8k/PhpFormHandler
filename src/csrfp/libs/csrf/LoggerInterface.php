@@ -1,5 +1,5 @@
 <?php
-namespace CSRFP\Logger;
+namespace OwaspCsrfProtection;
 /**
  * CSRF Protector's Logger interface.
  */

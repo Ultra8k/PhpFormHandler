@@ -1,5 +1,5 @@
 <?php
-namespace Form\FormHandler;
+namespace Ultra8k\PHPFormUtilities;
 
 use PHPMailer\PHPMailer\PHPMailer;
 

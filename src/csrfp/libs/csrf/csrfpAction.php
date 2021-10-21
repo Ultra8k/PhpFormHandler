@@ -1,5 +1,5 @@
 <?php
-namespace CSRFP\Action;
+namespace OwaspCsrfProtection;
 /**
  * This file has implementation for csrfpAction class.
  */
@@ -11,7 +11,7 @@ if (!defined('__CSRF_PROTECTOR_ACTION__')) {
     /**
      * Enumerator for actions.
      */
-    abstract class csrfpAction {
+    abstract class CsrfpAction {
         /**
          * Variable: ForbiddenResponseAction
          * Action of sending back 403 response code
