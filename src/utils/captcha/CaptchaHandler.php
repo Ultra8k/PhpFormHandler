@@ -1,5 +1,5 @@
 <?php
-namespace Captcha\CaptchaHandler;
+namespace Ultra8k\PHPFormUtilities\Captcha;
 
 class CaptchaHandler
 {

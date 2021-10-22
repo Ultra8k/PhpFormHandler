@@ -9,7 +9,7 @@
 * http://www.html-form-guide.com/
 */
 
-function FG_CaptchaValidator(captcha_ip,captcha_img)
+function CaptchaValidator(captcha_ip,captcha_img)
 {
     this.captcha_ip = captcha_ip;
     
@@ -54,7 +54,7 @@ function FG_CaptchaValidator(captcha_ip,captcha_img)
   {
       var url = captcha_img.src;
       var postStr = this.captcha_ip.name + "=" + 
-      encodeURIComponent( this.captcha_ip.value )+'&fg_validate_captcha=y';
+      encodeURIComponent( this.captcha_ip.value )+'&validate_captcha=y';
 
       this.Init('POST', url);
 
@@ -62,9 +62,9 @@ function FG_CaptchaValidator(captcha_ip,captcha_img)
   }
 }
 
-FG_CaptchaValidator.prototype = new FG_Ajax();
+CaptchaValidator.prototype = new Ajax();
 
-function FG_Ajax()
+function Ajax()
 {
    var _request = null;
    var _this = null;

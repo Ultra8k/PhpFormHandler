@@ -54,6 +54,7 @@ require_once(__DIR__ . "/utils/importForm.php");
               <!-- message field -->
               <?php echo $form->form_mw->MessageField(); ?>
             </div>
+            <?php echo $form->form_mw->SimpleCaptchaField(); ?>
           </div>
           <div class="w-full flex justify-end p-4">
             <button type="submit" name="submitForm" id="submitForm"

@@ -4,9 +4,9 @@ namespace OwaspCsrfProtection;
  * This file has implementation for csrfProtector class.
  */
 
-use OwaspCsrfProtection\CookieConfig;      // cookie config class
-use OwaspCsrfProtection\DefaultLogger;     // Logger class
-use OwaspCsrfProtection\Action;           // Actions enumerator
+use OwaspCsrfProtection\CsrfpCookieConfig;      // cookie config class
+use OwaspCsrfProtection\CsrfpDefaultLogger;     // Logger class
+use OwaspCsrfProtection\CsrfpAction;           // Actions enumerator
 
 if (!defined('__CSRF_PROTECTOR__')) {
     define('__CSRF_PROTECTOR__', true);         // to avoid multiple declaration errors

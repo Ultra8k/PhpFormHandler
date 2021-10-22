@@ -1,7 +1,7 @@
 <?php
-namespace Captcha\SimpleCaptcha;
+namespace Ultra8k\PHPFormUtilities\Captcha;
 
-use Captcha\CaptchaHandler\CaptchaHandler;
+use Ultra8k\PHPFormUtilities\Captcha\CaptchaHandler;
 /*
     Contact Form from HTML Form Guide
 

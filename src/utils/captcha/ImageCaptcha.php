@@ -1,9 +1,9 @@
 <?php
-namespace Captcha\ImageCaptcha;
+namespace Ultra8k\PHPFormUtilities\Captcha;
 
-use Captcha\CaptchaHandler\CaptchaHandler;
+use Ultra8k\PHPFormUtilities\Captcha\CaptchaHandler;
 
-class CaptchaCreator extends CaptchaHandler
+class ImageCaptcha extends CaptchaHandler
 {
     var $image;
     var $width;
@@ -27,7 +27,7 @@ class CaptchaCreator extends CaptchaHandler
         $this->margin_y = 10;
 
         $this->nlines = 2;
-        $this->font_file = 'include/SFOldRepublicSCBold.ttf';
+        $this->font_file = __DIR__ . "/../../includes/captcha/SFOldRepublicSCBold.ttf";
         $this->enc_key="GhsnR5^Hyhsfg";
         $this->captcha_var_name = $captcha_var_name;
     }
@@ -100,7 +100,7 @@ class CaptchaCreator extends CaptchaHandler
 
     function Create()
     {
-        $this->image = imagecreate($this->width, $this->height);
+        $this->image = @imagecreate($this->width, $this->height);
         imagecolorallocate($this->image, 255, 255, 255);
 
         $this->code = $this->CreateCode();

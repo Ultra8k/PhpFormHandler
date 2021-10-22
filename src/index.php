@@ -8,5 +8,7 @@
 </head>
 <body>
   <a href="/simple-form.php">Simple Form</a>
+  <a href="/simple-captcha.php">Simple Captcha</a>
+  <a href="/image-captcha.php">Image Captcha</a>
 </body>
 </html>

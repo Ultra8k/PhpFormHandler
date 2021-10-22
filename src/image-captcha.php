@@ -9,6 +9,7 @@ require_once(__DIR__ . "/utils/importForm.php");
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="./js/captcha_validator.js"></script>
 </head>
 
 <body>
@@ -54,6 +55,8 @@ require_once(__DIR__ . "/utils/importForm.php");
               <!-- message field -->
               <?php echo $form->form_mw->MessageField(); ?>
             </div>
+            <?php echo $form->form_mw->ImageCaptchaField(); ?>
+            <?php echo $form->form_mw->ImageCaptchaRefresh(); ?>
           </div>
           <div class="w-full flex justify-end p-4">
             <button type="submit" name="submitForm" id="submitForm"
@@ -63,6 +66,8 @@ require_once(__DIR__ . "/utils/importForm.php");
       </form>
     </div>
   </div>
+
+  <script src="./js/img_captcha.js"></script>
 </body>
 
 </html>

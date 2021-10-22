@@ -16,6 +16,7 @@
     "autoload": {
       "psr-4": {
         "Ultra8k\\PHPFormUtilities\\": "src/utils/",
+        "Ultra8k\\PHPFormUtilities\\Captcha\\": "src/utils/captcha/",
         "OwaspCsrfProtection\\": "src/csrfp/libs/csrf/"
       }
     }
