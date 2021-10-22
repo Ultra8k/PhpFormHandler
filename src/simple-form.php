@@ -16,33 +16,33 @@ require_once(__DIR__ . "/utils/importForm.php");
     <div class="w-full">
       <ul>
       <?php if ($form->msg->hasErrors()) {
-        foreach ($form->msg->getMessages("error") as $message) {
+        foreach ($form->msg->getMessages("error", true) as $message) {
           echo "<li>$message</li>";
         }
       }
       ?>
       </ul>
-      <form id="contactus" class="mt-4" action="<?php echo $form->form_mw->GetFormAction(); ?>" method="post" accept-charset="UTF-8">
-        <?php echo $form->form_mw->SpamField(); ?>
+      <form id="contactus" class="mt-4" action="<?php echo $form->GetFormAction(); ?>" method="post" accept-charset="UTF-8">
+        <?php echo $form->SpamField(); ?>
         <div class="flex flex-wrap">
           <div class="w-full md:w-1/2 px-4">
             <div class="mb-4">
               <label for="name" class="block mb-2 text-sm text-gray-50">Your Full Name</label>
 
               <!-- name field -->
-              <?php echo $form->form_mw->NameField(); ?>
+              <?php echo $form->NameField(); ?>
             </div>
             <div class="mb-4">
               <label for="email" class="block mb-2 text-sm text-gray-50">Your Email</label>
 
               <!-- email field -->
-              <?php echo $form->form_mw->EmailField(); ?>
+              <?php echo $form->EmailField(); ?>
             </div>
             <div class="mb-4">
               <label for="phone" class="block mb-2 text-sm text-gray-50">Your Phone Number</label>
 
               <!-- phone field -->
-              <?php echo $form->form_mw->PhoneField(); ?>
+              <?php echo $form->PhoneField(); ?>
             </div>
           </div>
           <div class="w-full md:w-1/2 px-4">
@@ -52,7 +52,7 @@ require_once(__DIR__ . "/utils/importForm.php");
                     id="character-counter">0</span>/500</span></label>
 
               <!-- message field -->
-              <?php echo $form->form_mw->MessageField(); ?>
+              <?php echo $form->MessageField(); ?>
             </div>
           </div>
           <div class="w-full flex justify-end p-4">

@@ -2,6 +2,7 @@
 namespace Ultra8k\PHPFormUtilities;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use Gregwar\Captcha as Captcha;
 
 final class FormHandler {
 	var array $recipients;
@@ -92,11 +93,7 @@ final class FormHandler {
 				"maxsize" => $max_size);
 	}
 
-	function ProcessForm($valid_captcha, $post, $files) {
-    if ($valid_captcha === "false") {
-      $this->add_error("Captcha is incorrect.");
-      return false;
-    }
+	function ProcessForm($post, $files) {
     $this->post = $post;
     $this->files = $files;
 		if (!isset($this->post['submitted'])) {
@@ -380,12 +377,17 @@ final class FormHandler {
 		}
 
 		// captcha validaions
-		// if (isset($this->captcha_handler)) {
-		// 	if (!$this->captcha_handler->Validate()) {
-		// 		$this->add_error($this->captcha_handler->GetError());
-		// 		$ret = false;
-		// 	}
-		// }
+		if (isset($_SESSION['captcha'])) {
+			if (isset($this->post['captcha'])) {
+				if (!Captcha\PhraseBuilder::comparePhrases($_SESSION['captcha'], $_POST['captcha'])) {
+					$this->add_error("Captcha is not correct!");
+					$ret = false;
+				}
+			} else {
+				$this->add_error("Captcha is missing!");
+				$ret = false;
+			}
+		}
 
 		//file upload validations
 		if (!empty($this->fileupload_fields)) {

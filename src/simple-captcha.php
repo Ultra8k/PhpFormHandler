@@ -16,7 +16,7 @@ require_once(__DIR__ . "/utils/importForm.php");
     <div class="w-full">
       <ul>
       <?php if ($form->msg->hasErrors()) {
-        foreach ($form->msg->getMessages("error") as $message) {
+        foreach ($form->msg->getMessages("error", true) as $message) {
           echo "<li>$message</li>";
         }
       }
