@@ -1,42 +1,44 @@
 <?php
 namespace Ultra8k\PHPFormUtilities;
 
+use OwaspCsrfProtection\CsrfProtector;
+use Ultra8k\PHPFormUtilities\FlashMessages;
 use Ultra8k\PHPFormUtilities\FormHandler;
-use Ultra8k\PHPFormUtilities\Captcha as Captcha;
+use Gregwar\Captcha as Captcha;
 
 class FormMiddleware {
-
+  private array $config;
+  public FlashMessages $msg;
   protected FormHandler $handler;
   protected string $from;
   protected array $recipients;
   public ?string $input_class = null;
   public ?string $validation_class = null;
-  protected $captcha;
   protected bool $jsValidation;
+  protected Captcha\CaptchaBuilder $captcha;
   
-  public function __construct(
-    string $site,
-    string $from,
-    array $to,
-    ?string $class = null,
-    ?string $validationClass = null,
-    bool $jsValidation,
-    ?string $captcha = null)
+  public function __construct(bool $jsValidation = false, bool $captcha = false)
   {
+    $this->config = include(__DIR__ . "/../config/config.php");
+
+    if (!session_id()) @session_start();
+    CsrfProtector::init();
+
+    $this->msg = new FlashMessages();
     $this->handler = new FormHandler();
-    $this->handler->SetFormRandomKey(base64_encode($site));
-    $this->from = $from;
+    $this->handler->SetFormRandomKey(base64_encode($this->config["DOMAIN"]));
+    $this->from = $this->config["FROM_EMAIL"];
     $this->SetFromAddress();
-    $this->recipients = $to;
+    $this->recipients = $this->config["TO_EMAIL"];
     $this->AddRecipients();
-    if ($class) $this->SetInputClass($class);
-    if ($validationClass) $this->SetValidationClass($validationClass);
+    if ($this->config["INPUT_CLASS"]) $this->SetInputClass($this->config["INPUT_CLASS"]);
+    if ($this->config["VALIDATION_CLASS"]) $this->SetValidationClass($this->config["VALIDATION_CLASS"]);
     $this->jsValidation = $jsValidation;
 
-    if ($captcha === "simple") $this->captcha = new Captcha\SimpleCaptcha('scaptcha');
-    if ($captcha === "image") $this->captcha = new Captcha\ImageCaptcha('scaptcha');
-
-    if ($this->captcha) $this->handler->EnableCaptcha($this->captcha);
+    if ($captcha) {
+      $this->captcha = new Captcha\CaptchaBuilder;
+      $this->RefreshCaptcha();
+    }
   }
 
   private function SetFromAddress() {
@@ -74,18 +76,31 @@ class FormMiddleware {
     return $this->handler->GetSelfScript();
   }
 
-  public function SubmitForm() {
-    if(!$this->handler->ProcessForm($_POST, $_FILES))
-    {
-      return false;
-    }
-    return true;
+  private function RefreshCaptcha() {
+    unset($_SESSION['captcha']);
+    $this->captcha->build();
+    $_SESSION['captcha'] = $this->captcha->getPhrase();
   }
 
-  private function GenerateImageCaptcha() {
-    header("pragma: no-cache");
-    header("cache-control: no-cache");
-    $this->captcha->DisplayCaptcha();
+  private function TestCaptcha() {
+    print_r('session var isset: ' . isset($_SESSION['captcha']));
+    print_r('captcha test passed: '. $this->captcha->testPhrase($_POST['captcha']));
+    if (isset($_SESSION['captcha']) && $this->captcha->testPhrase($_POST['captcha'])) {
+      return "true";
+    } else {
+      return "false";
+    }
+  }
+
+  public function SubmitForm() {
+    if (!$this->handler->ProcessForm($this->TestCaptcha(), $_POST, $_FILES)) {
+      $this->RefreshCaptcha();
+      foreach ($this->GetErrors() as $error) {
+        $this->msg->error($error);
+      }
+    } else {
+      $this->msg->success($this->config["FORM_SUCCESS"]);
+    }
   }
 
   public function GetErrors() {
@@ -133,45 +148,14 @@ class FormMiddleware {
       return $input;
   }
 
-  public function SimpleCaptchaField() {
-    $input = '
-    <label for="scaptcha">' . $this->captcha->GetSimpleCaptcha() . '</label>
-    <input type="text" name="scaptcha" id="scaptcha" maxlength="10" /><br/>
-    ';
-    if ($this->jsValidation) $input .= '<span id="contactus_scaptcha_errorloc" class="error"></span>';
-    return $input;
-  }
-
-  public function ImageCaptchaRefresh() {
-    return '
-    <div class="short_explanation">Can"t read the image?
-    <a href="javascript: refresh_captcha_img();">Click here to refresh</a>.</div>
-    ';
-  }
-
   public function ImageCaptchaField() {
     $input = '
-    <div><img alt="Captcha image" src="./includes/captcha/GenerateCaptcha.php?rand=1" id="scaptcha_img" /></div>
-    <label for="scaptcha" >Enter the code above here:</label>
-    <input type="text" name="scaptcha" id="scaptcha" maxlength="10" />  
+    <div><img alt="Captcha image" src="' . $this->captcha->inline() . '" id="captcha_img" data-value="' . $_SESSION['captcha'] . '" /></div>
+    <label for="captcha" >Enter the code above here:</label>
+    <input type="text" name="captcha" id="captcha" maxlength="10" />  
     ';
     if ($this->jsValidation) $input .= '<span id="contactus_scaptcha_errorloc" class="error"></span>';
     return $input;
-  }
-
-  public function FormInitAjaxResponse() {
-    $response = [
-      "spam_field" => $this->SpamField(),
-      "name_field" => $this->NameField(),
-      "email_field" => $this->EmailField(),
-      "phone_field" => $this->PhoneField(),
-      "message_field" => $this->MessageField()
-    ];
-
-    header('Content-type:application/json;charset=utf-8');
-    http_response_code(200);
-    echo json_encode($response);
-    exit();
   }
 
 }

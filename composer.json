@@ -11,7 +11,8 @@
     "require": {
         "phpmailer/phpmailer": "^6.5",
         "plasticbrain/php-flash-messages": "^1.0",
-        "owasp/csrf-protector-php": "^1.0"
+        "owasp/csrf-protector-php": "^1.0",
+        "gregwar/captcha": "^1.1"
     },
     "autoload": {
       "psr-4": {

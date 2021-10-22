@@ -17,7 +17,7 @@ final class FormHandler {
 	var string $conditional_field;
 	var array $arr_conditional_recipients;
 	var array $fileupload_fields;
-	var $captcha_handler;
+	// var $captcha_handler;
   var bool $isAjax;
   protected array $post;
   protected array $files;
@@ -36,10 +36,10 @@ final class FormHandler {
 		$this->mailer->CharSet = 'utf-8';
 	}
 
-	function EnableCaptcha($captcha_handler) {
-		$this->captcha_handler = $captcha_handler;
-		if (!session_id()) @session_start();
-	}
+	// function EnableCaptcha($captcha_handler) {
+	// 	$this->captcha_handler = $captcha_handler;
+	// 	if (!session_id()) @session_start();
+	// }
 
 	function AddRecipient($email, $name = "") {
 		$this->mailer->AddAddress($email, $name);
@@ -92,7 +92,11 @@ final class FormHandler {
 				"maxsize" => $max_size);
 	}
 
-	function ProcessForm($post, $files) {
+	function ProcessForm($valid_captcha, $post, $files) {
+    if ($valid_captcha === "false") {
+      $this->add_error("Captcha is incorrect.");
+      return false;
+    }
     $this->post = $post;
     $this->files = $files;
 		if (!isset($this->post['submitted'])) {
@@ -375,13 +379,14 @@ final class FormHandler {
 			$ret = false;
 		}
 
-		//captcha validaions
-		if (isset($this->captcha_handler)) {
-			if (!$this->captcha_handler->Validate()) {
-				$this->add_error($this->captcha_handler->GetError());
-				$ret = false;
-			}
-		}
+		// captcha validaions
+		// if (isset($this->captcha_handler)) {
+		// 	if (!$this->captcha_handler->Validate()) {
+		// 		$this->add_error($this->captcha_handler->GetError());
+		// 		$ret = false;
+		// 	}
+		// }
+
 		//file upload validations
 		if (!empty($this->fileupload_fields)) {
 			if (!$this->ValidateFileUploads()) {

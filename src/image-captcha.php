@@ -9,7 +9,6 @@ require_once(__DIR__ . "/utils/importForm.php");
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <script src="./js/captcha_validator.js"></script>
 </head>
 
 <body>
@@ -23,27 +22,27 @@ require_once(__DIR__ . "/utils/importForm.php");
       }
       ?>
       </ul>
-      <form id="contactus" class="mt-4" action="<?php echo $form->form_mw->GetFormAction(); ?>" method="post" accept-charset="UTF-8">
-        <?php echo $form->form_mw->SpamField(); ?>
+      <form id="contactus" class="mt-4" action="<?php echo $form->GetFormAction(); ?>" method="post" accept-charset="UTF-8">
+        <?php echo $form->SpamField(); ?>
         <div class="flex flex-wrap">
           <div class="w-full md:w-1/2 px-4">
             <div class="mb-4">
               <label for="name" class="block mb-2 text-sm text-gray-50">Your Full Name</label>
 
               <!-- name field -->
-              <?php echo $form->form_mw->NameField(); ?>
+              <?php echo $form->NameField(); ?>
             </div>
             <div class="mb-4">
               <label for="email" class="block mb-2 text-sm text-gray-50">Your Email</label>
 
               <!-- email field -->
-              <?php echo $form->form_mw->EmailField(); ?>
+              <?php echo $form->EmailField(); ?>
             </div>
             <div class="mb-4">
               <label for="phone" class="block mb-2 text-sm text-gray-50">Your Phone Number</label>
 
               <!-- phone field -->
-              <?php echo $form->form_mw->PhoneField(); ?>
+              <?php echo $form->PhoneField(); ?>
             </div>
           </div>
           <div class="w-full md:w-1/2 px-4">
@@ -53,10 +52,9 @@ require_once(__DIR__ . "/utils/importForm.php");
                     id="character-counter">0</span>/500</span></label>
 
               <!-- message field -->
-              <?php echo $form->form_mw->MessageField(); ?>
+              <?php echo $form->MessageField(); ?>
             </div>
-            <?php echo $form->form_mw->ImageCaptchaField(); ?>
-            <?php echo $form->form_mw->ImageCaptchaRefresh(); ?>
+            <?php echo $form->ImageCaptchaField(); ?>
           </div>
           <div class="w-full flex justify-end p-4">
             <button type="submit" name="submitForm" id="submitForm"
@@ -67,7 +65,6 @@ require_once(__DIR__ . "/utils/importForm.php");
     </div>
   </div>
 
-  <script src="./js/img_captcha.js"></script>
 </body>
 
 </html>
