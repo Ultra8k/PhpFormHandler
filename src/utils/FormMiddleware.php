@@ -17,7 +17,7 @@ class FormMiddleware {
   protected bool $jsValidation;
   protected Captcha\CaptchaBuilder $captcha;
   
-  public function __construct(bool $jsValidation = false)
+  public function __construct(bool $jsValidation = false, bool $separateNameFields = false)
   {
     $this->config = include(__DIR__ . "/../config/config.php");
 
@@ -26,6 +26,7 @@ class FormMiddleware {
     $this->msg = new FlashMessages();
     $this->handler = new FormHandler();
     $this->handler->SetFormRandomKey(base64_encode($this->config["DOMAIN"]));
+    if ($separateNameFields) $this->handler->UseSeparateNameFields();
     $this->from = $this->config["FROM_EMAIL"];
     $this->SetFromAddress();
     $this->recipients = $this->config["TO_EMAIL"];
@@ -120,6 +121,22 @@ class FormMiddleware {
         <input type="text" name="name" id="name" class="' . $this->GetInputValidationClass() . '" value="' . $this->handler->SafeDisplay('name') . '" placeholder="John Doe" pattern="^[a-zA-Z\s]+$">
       ';
       if ($this->jsValidation) $input .= '<span id="contactus_name_errorloc" class="error"></span>';
+      return $input;
+  }
+
+  public function FirstNameField() {
+      $input = '
+        <input type="text" name="fname" id="fname" class="' . $this->GetInputValidationClass() . '" value="' . $this->handler->SafeDisplay('fname') . '" placeholder="John" pattern="^[a-zA-Z\s]+$">
+      ';
+      if ($this->jsValidation) $input .= '<span id="contactus_fname_errorloc" class="error"></span>';
+      return $input;
+  }
+
+  public function LastNameField() {
+      $input = '
+        <input type="text" name="lname" id="lname" class="' . $this->GetInputValidationClass() . '" value="' . $this->handler->SafeDisplay('lname') . '" placeholder="Doe" pattern="^[a-zA-Z\s]+$">
+      ';
+      if ($this->jsValidation) $input .= '<span id="contactus_lname_errorloc" class="error"></span>';
       return $input;
   }
 

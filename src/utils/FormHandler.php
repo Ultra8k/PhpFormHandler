@@ -8,7 +8,9 @@ final class FormHandler {
 	var array $recipients;
 	var array $errors;
 	var string $error_message;
+	var bool $separate_name_fields = false;
 	var string $name;
+	var string $fname;
 	var string $lname;
 	var string $email;
 	var string $phone;
@@ -41,6 +43,10 @@ final class FormHandler {
 	// 	$this->captcha_handler = $captcha_handler;
 	// 	if (!session_id()) @session_start();
 	// }
+
+	function UseSeparateNameFields () {
+		$this->separate_name_fields = true;
+	}
 
 	function AddRecipient($email, $name = "") {
 		$this->mailer->AddAddress($email, $name);
@@ -337,13 +343,34 @@ final class FormHandler {
 		}
 
 		// name validations
-		if (empty($this->post['name'])) {
-			$this->add_error("Please provide your name");
-			$ret = false;
-		} else
-		if (strlen($this->post['name']) > 75) {
-			$this->add_error("Name is too long!");
-			$ret = false;
+		if (!$this->separate_name_fields) {
+			if (empty($this->post['name'])) {
+				$this->add_error("Please provide your name");
+				$ret = false;
+			} else
+			if (strlen($this->post['name']) > 75) {
+				$this->add_error("Name is too long!");
+				$ret = false;
+			}
+		} else {
+			// name validations
+			if (empty($this->post['fname'])) {
+				$this->add_error("Please provide your first name");
+				$ret = false;
+			} else
+			if (strlen($this->post['fname']) > 25) {
+				$this->add_error("First Name is too long!");
+				$ret = false;
+			}
+			// name validations
+			if (empty($this->post['lname'])) {
+				$this->add_error("Please provide your last name");
+				$ret = false;
+			} else
+			if (strlen($this->post['lname']) > 25) {
+				$this->add_error("Last Name is too long!");
+				$ret = false;
+			}
 		}
 
 		//email validations
@@ -496,7 +523,13 @@ final class FormHandler {
 	private function CollectData() {
     $this->isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
       strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
-		$this->name = $this->Sanitize($this->post['name']);
+		if ($this->separate_name_fields) {
+			$this->fname = $this->Sanitize($this->post['fname']);
+			$this->lname = $this->Sanitize($this->post['lname']);
+			$this->name = $this->fname . ' ' . $this->lname;
+		} else {
+			$this->name = $this->Sanitize($this->post['name']);
+		}
 		$this->email = $this->Sanitize($this->post['email']);
 		$this->phone = $this->Sanitize($this->post['phone']);
 
