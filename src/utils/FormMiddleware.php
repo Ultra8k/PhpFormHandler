@@ -7,7 +7,7 @@ use Ultra8k\PHPFormUtilities\FormHandler;
 use Gregwar\Captcha as Captcha;
 
 class FormMiddleware {
-  private array $config;
+  private $config;
   public FlashMessages $msg;
   protected FormHandler $handler;
   protected string $from;
@@ -17,11 +17,10 @@ class FormMiddleware {
   protected bool $jsValidation;
   protected Captcha\CaptchaBuilder $captcha;
   
-  public function __construct(bool $jsValidation = false, bool $captcha = false)
+  public function __construct(bool $jsValidation = false)
   {
     $this->config = include(__DIR__ . "/../config/config.php");
 
-    if (!session_id()) @session_start();
     CsrfProtector::init();
 
     $this->msg = new FlashMessages();
@@ -35,10 +34,10 @@ class FormMiddleware {
     if ($this->config["VALIDATION_CLASS"]) $this->SetValidationClass($this->config["VALIDATION_CLASS"]);
     $this->jsValidation = $jsValidation;
 
-    if ($captcha) {
-      $this->captcha = new Captcha\CaptchaBuilder;
-      $this->RefreshCaptcha();
-    }
+    // if ($captcha) {
+    //   $this->captcha = new Captcha\CaptchaBuilder;
+    //   $this->RefreshCaptcha();
+    // }
   }
 
   private function SetFromAddress() {
@@ -76,25 +75,25 @@ class FormMiddleware {
     return $this->handler->GetSelfScript();
   }
 
-  private function RefreshCaptcha() {
-    unset($_SESSION['captcha']);
-    $this->captcha->build();
-    $_SESSION['captcha'] = $this->captcha->getPhrase();
-  }
+  // private function RefreshCaptcha() {
+  //   unset($_SESSION['captcha']);
+  //   $this->captcha->build();
+  //   $_SESSION['captcha'] = $this->captcha->getPhrase();
+  // }
 
-  private function TestCaptcha() {
-    print_r('session var isset: ' . isset($_SESSION['captcha']));
-    print_r('captcha test passed: '. $this->captcha->testPhrase($_POST['captcha']));
-    if (isset($_SESSION['captcha']) && $this->captcha->testPhrase($_POST['captcha'])) {
-      return "true";
-    } else {
-      return "false";
-    }
-  }
+  // public function TestCaptcha() {
+  //   if (
+  //     isset($_SESSION['captcha']) &&
+  //     Captcha\PhraseBuilder::comparePhrases($_SESSION['captcha'], $_POST['captcha'])
+  //   ) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   public function SubmitForm() {
-    if (!$this->handler->ProcessForm($this->TestCaptcha(), $_POST, $_FILES)) {
-      $this->RefreshCaptcha();
+    if (!$this->handler->ProcessForm($_POST, $_FILES)) {
       foreach ($this->GetErrors() as $error) {
         $this->msg->error($error);
       }
@@ -150,7 +149,7 @@ class FormMiddleware {
 
   public function ImageCaptchaField() {
     $input = '
-    <div><img alt="Captcha image" src="' . $this->captcha->inline() . '" id="captcha_img" data-value="' . $_SESSION['captcha'] . '" /></div>
+    <div><img alt="Captcha image" src="./includes/captcha/CreateCaptcha.php" id="captcha_img" /></div>
     <label for="captcha" >Enter the code above here:</label>
     <input type="text" name="captcha" id="captcha" maxlength="10" />  
     ';
