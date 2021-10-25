@@ -1,0 +1,24 @@
+{
+    "name": "ultra8k/php-form-utilities",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ultra8KInc",
+            "email": "rwright@ultra8k.biz"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.5",
+        "plasticbrain/php-flash-messages": "^1.0",
+        "owasp/csrf-protector-php": "^1.0",
+        "gregwar/captcha": "^1.1"
+    },
+    "autoload": {
+      "psr-4": {
+        "Ultra8k\\PHPFormUtilities\\": "src/utils/",
+        "Ultra8k\\PHPFormUtilities\\Captcha\\": "src/utils/captcha/",
+        "OwaspCsrfProtection\\": "src/csrfp/libs/csrf/"
+      }
+    }
+}
